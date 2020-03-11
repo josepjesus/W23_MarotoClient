@@ -7,6 +7,7 @@ using System;
 using UnityEngine.Networking;
 using System.Text;
 using UnityEngine.UI;
+using Assets.Scripts.Models;
 //using static System.Net.Mime.MediaTypeNames;
 
 public class GameManager : MonoBehaviour
@@ -120,11 +121,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            List<ChatModel> cm = JsonUtility.FromJson<List<ChatModel>>(httpClient.downloadHandler.text);
+            string jsonResponse = httpClient.downloadHandler.text;
+            string response = "{\"listOfMesages\":" + jsonResponse + "}";
+            //List<ChatModel> cm = JsonUtility.FromJson<List<ChatModel>>(httpClient.downloadHandler.text);
+            ListChatModel cm = JsonUtility.FromJson<ListChatModel>(response);
             //chatText.text = chatText.text + "/n" + cm.Id.Substring(0, 3) + "> " + cm.LastMesage;
-            foreach(ChatModel c in cm)
+            foreach (ChatModel c in cm.listOfMesages)
             {
-                chatText.text = chatText.text + "/n" + c.Id.Substring(0, 3) + "> " + c.LastMesage;
+                chatText.text = chatText.text + "\n" + c.Id.Substring(0,3) + "> " + c.LastMesage;
             }
         }
 
